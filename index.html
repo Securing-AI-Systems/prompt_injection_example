@@ -146,13 +146,17 @@
 
 <script>
   // Manual verification only. 
-  const CANARY = "http://canarytokens.com/feedback/tags/37sqh425bge5f7jpb855n81bp/contact.php";
+  // https, not http: browsers block http requests from an https page as mixed content.
+  const CANARY = "https://canarytokens.com/feedback/tags/37sqh425bge5f7jpb855n81bp/contact.php";
+  // Tags manual clicks so they can be told apart from AI submissions in the alert.
+  const SOURCE = "manual button push";
   const btn = document.getElementById("fire");
   const result = document.getElementById("result");
   btn.addEventListener("click", () => {
     const token = "37sqh425bge5f7jpb855n81bp";
+    const url = CANARY + "?t=" + encodeURIComponent(token) + "&source=" + encodeURIComponent(SOURCE);
     // no-cors: we only need the request to leave the browser so the canary records it.
-    fetch(CANARY + "?t=" + encodeURIComponent(token), { mode: "no-cors" })
+    fetch(url, { mode: "no-cors", cache: "no-store" })
       .then(() => {
         result.textContent = "Request sent. Check your alerts.";
         result.classList.add("fired");
